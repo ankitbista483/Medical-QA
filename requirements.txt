@@ -1,0 +1,15 @@
+pandas
+xmltodict
+transformers
+torch
+sentence-transformers
+datasets
+faiss-cpu
+pinecone-client
+fastapi
+uvicorn
+scikit-learn
+numpy
+loguru
+
+-e .
