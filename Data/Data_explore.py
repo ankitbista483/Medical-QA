@@ -26,6 +26,3 @@ with open(csv_file_path,mode='w',newline= '', encoding='utf-8') as csvfile:
             Answer = qa.find('Answer').text if qa.find('Answer') is not None else "No Answer"
 
             writer.writerow([Question,Answer])
-
-
-print(f"Data has been saved in csv at {csv_file_path}")
