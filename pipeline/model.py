@@ -4,9 +4,9 @@ from transformers import BartForConditionalGeneration, AdamW, BartTokenizer
 from Data.QADataset import QADataset
 
 class Model:
-    def __init__(self, model_name='facebook/bart-base', optimizer=AdamW, lr=5e-5, batch_size=4):
+    def __init__(self, model_name='facebook/bart-base', optimizer=AdamW, lr=2e-5, batch_size=6):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.qa_dataset = QADataset()[:50]
+        self.qa_dataset = QADataset()
         self.tokenizer = BartTokenizer.from_pretrained(model_name)
         self.model = BartForConditionalGeneration.from_pretrained(model_name).to(self.device)
         self.optimizer = optimizer(self.model.parameters(), lr=lr,no_deprecation_warning=True)
@@ -16,7 +16,7 @@ class Model:
         dataloader = DataLoader(self.qa_dataset, batch_size=self.batch_size, shuffle=True)
         return dataloader
         
-    def model_trainer(self, epochs=3, accumulation_steps=4):
+    def model_trainer(self, epochs=50, accumulation_steps=4):
         self.model.train()
         for epoch in range(epochs):
             for i, batch in enumerate(self.data_loader()):
@@ -36,6 +36,10 @@ class Model:
                 if i % 10 == 0:
                     print(f"Epoch {epoch + 1} Step {i} Loss: {loss.item() * accumulation_steps}")
 
+    def save_model(self, save_path = '/Users/ankitbista/Desktop/practice/MedQuAD/Medical-QA/qa_model.pth'):
+        torch.save(self.model.state_dict(), save_path)
+
+
     def generate_answer(self, question, max_length=50):
         self.model.eval()
         inputs = self.tokenizer(question, return_tensors="pt").to(self.device)
@@ -49,7 +53,7 @@ if __name__ == "__main__":
     m = Model()
     m.model_trainer()
 
-    
+    m.save_model('qa_model.pth')
     question = "What is cell lung cancer?"
     answer = m.generate_answer(question)
     print(f"Question: {question}")
