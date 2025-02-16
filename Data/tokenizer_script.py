@@ -19,5 +19,12 @@ class QATokenizer:
                 padding = True, 
                 truncation = True, 
                 return_tensors = 'pt')
+            
+            print(tokenized_input)
 
             return self.tokenized_input.append(tokenized_input)
+        
+
+
+j = QATokenizer(data_path='/Users/ankitbista/Desktop/practice/MedQuAD/Medical-QA/data.csv')
+j = j.tokenized_data()
